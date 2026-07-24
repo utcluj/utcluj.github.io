@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐍 PyFunClub - Învață Python prin Joc!</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Toast notification container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <div class="logo">
+        <h1>🐍 PyFunClub</h1>
+      </div>
+      <nav class="lesson-nav" id="lessonNav"></nav>
+      <div class="player-stats">
+        <div class="stat">
+          <span class="stat-label">⭐ XP Total</span>
+          <span class="stat-value" id="xpDisplay">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">🔥 Seria de Zile</span>
+          <span class="stat-value" id="streakDisplay">0</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </aside>
+    <main class="main-content">
+      <div class="content-panel" id="contentPanel"></div>
+    </main>
+  </div>
+
+  <!-- Floating, Draggable and Resizable Code Editor -->
+  <div class="floating-editor" id="floatingEditor">
+    <!-- Resize Handles for all sides & corners -->
+    <div class="resizer r-top"></div>
+    <div class="resizer r-bottom"></div>
+    <div class="resizer r-left"></div>
+    <div class="resizer r-right"></div>
+    <div class="resizer r-top-left"></div>
+    <div class="resizer r-top-right"></div>
+    <div class="resizer r-bottom-left"></div>
+    <div class="resizer r-bottom-right"></div>
+
+    <div class="editor-header" id="editorHeader">
+      <div class="header-drag-area">
+        <span class="drag-handle">⠿</span>
+        <h2>💻 Editorul Tău Magic</h2>
+      </div>
+      <div class="editor-actions">
+        <button class="btn btn-run" id="runBtn" title="Rulează codul Python">▶ Rulează</button>
+        <button class="btn btn-submit" id="submitBtn" title="Trimite soluția spre verificare">✅ Trimite</button>
+        <button class="btn-win btn-minimize" id="minimizeBtn" title="Ascunde editorul">➖</button>
+      </div>
+    </div>
+    <div class="editor-body" id="editorBody">
+      <div class="editor-wrapper">
+        <textarea id="codeEditor" spellcheck="false" placeholder="# Scrie codul tău Python aici..."></textarea>
+      </div>
+      <div class="output-wrapper">
+        <div class="output-header">
+          <span>🖥️ Ecranul Ieșire</span>
+          <button class="btn btn-small" id="clearOutputBtn">Șterge</button>
+        </div>
+        <pre id="outputArea" class="output-area"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toggle Button when Editor is Hidden -->
+  <button id="floatingToggleBtn" class="floating-toggle-btn hidden" title="Afișează Editorul">
+    <span>💻 Deschide Editorul</span>
+  </button>
+
+  <div id="pyodideLoading" class="loading-overlay">
+    <div class="loading-content">
+      <div class="spinner"></div>
+      <p>🪄 Se încarcă magia Python...</p>
+      <p class="loading-hint">Poate dura câteva secunde la prima încărcare</p>
+    </div>
+  </div>
+
+  <script src="js/curriculum.js"></script>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
