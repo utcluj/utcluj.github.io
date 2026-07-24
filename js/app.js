@@ -25,7 +25,7 @@ const floatingToggleBtn = document.getElementById('floatingToggleBtn');
 
 function loadProgress() {
   try {
-    const saved = localStorage.getItem('pyfunclub_progress');
+    const saved = localStorage.getItem('FunPyClub_progress');
     if (saved) {
       const data = JSON.parse(saved);
       completedLessons = new Set(data.completed || []);
@@ -52,7 +52,7 @@ function saveProgress() {
       streak,
       lastCompletedDate
     };
-    localStorage.setItem('pyfunclub_progress', JSON.stringify(data));
+    localStorage.setItem('FunPyClub_progress', JSON.stringify(data));
   } catch (e) {
     console.error('Failed to save progress:', e);
   }
