@@ -6,10 +6,6 @@ let totalXP = 0;
 let streak = 0;
 let lastCompletedDate = null;
 
-let cheatState = 0; // State machine for cheat code
-let cheatActive = false; // Tracks if the unlock cheat is currently active
-let preCheatActiveLessonId = null; // Saves the active lesson ID before the cheat unlocks everything
-
 const outputArea = document.getElementById('outputArea');
 const codeEditor = document.getElementById('codeEditor');
 const lessonNav = document.getElementById('lessonNav');
@@ -44,7 +40,6 @@ function loadProgress() {
 }
 
 function saveProgress() {
-  if (cheatActive) return; // Do not save any progress while the cheat is active!
   try {
     const data = {
       completed: Array.from(completedLessons),
@@ -168,85 +163,17 @@ function renderSidebar() {
     item.className = 'nav-item';
     if (lesson.id === currentLessonId) item.classList.add('active');
     if (completedLessons.has(lesson.id)) item.classList.add('completed');
-    
-    const isLocked = index > 0 && !completedLessons.has(CURRICULUM[index - 1].id);
-    if (isLocked) {
-      item.classList.add('locked');
-    }
-    
+
     item.innerHTML = `
       <span class="nav-icon">${lesson.icon}</span>
       <span>${index + 1}. ${lesson.title}</span>
     `;
-    
+
     item.addEventListener('click', () => {
-      if (!item.classList.contains('locked')) {
-        loadLesson(lesson.id);
-      } else {
-        showToast('🔒 Finalizează lecțiile anterioare mai întâi!', 'error');
-      }
+      loadLesson(lesson.id);
     });
     lessonNav.appendChild(item);
   });
-}
-
-// State machine triggers for the unlock cheat code
-function handleLogoClick() {
-  if (cheatActive) {
-    // Revert cheat! Re-locks and restores progress to saved state
-    cheatActive = false;
-    cheatState = 0;
-    loadProgress();
-    updateStats();
-    
-    // Select previously active section in sidebar before cheat was activated
-    if (preCheatActiveLessonId) {
-      loadLesson(preCheatActiveLessonId);
-    } else if (CURRICULUM.length > 0) {
-      loadLesson(CURRICULUM[0].id);
-    } else {
-      renderSidebar();
-    }
-    
-    showToast("🔒 Cheat dezactivat! Progresul a revenit la starea salvată.", "info");
-    return;
-  }
-  
-  if (cheatState === 0) cheatState = 1;
-  else if (cheatState === 1) cheatState = 2;
-  else if (cheatState === 2) cheatState = 3;
-  else if (cheatState === 4) cheatState = 5;
-  else if (cheatState === 5) cheatState = 6;
-  else if (cheatState === 7) cheatState = 8;
-  else if (cheatState === 8) cheatState = 9;
-  else if (cheatState === 9) cheatState = 10;
-  else if (cheatState === 10) cheatState = 11;
-  else {
-    cheatState = 1; // Restart sequence from first logo click
-  }
-  console.log("Cheat State (Logo Click):", cheatState);
-}
-
-function handleButtonClick() {
-  if (cheatActive) return; // Do not check code when cheat is already active
-  
-  if (cheatState === 3) {
-    cheatState = 4;
-  } else if (cheatState === 6) {
-    cheatState = 7;
-  } else if (cheatState === 11) {
-    // UNLOCKED EVERYTHING IN MEMORY ONLY (Do not save progress)
-    preCheatActiveLessonId = currentLessonId; // Save currently selected lesson
-    cheatActive = true;
-    completedLessons = new Set(CURRICULUM.map(l => l.id));
-    // progress is NOT saved here to localStorage
-    renderSidebar();
-    showToast("🔓 Cheat Code activat! Toate secțiunile sunt deblocate.", "success");
-    cheatState = 0;
-  } else {
-    cheatState = 0; // Reset
-  }
-  console.log("Cheat State (Button Click):", cheatState);
 }
 
 function renderLesson(lesson) {
@@ -284,11 +211,17 @@ function renderLesson(lesson) {
     floatingEditor.classList.remove('minimized');
     floatingToggleBtn.classList.add('hidden');
     codeEditor.focus();
-    showToast('Editorul a fost deschis! Spor la scris cod! 🚀', 'info');
     
-    // Cheat code step check
-    handleButtonClick();
-  });
+    if (window.innerWidth > 900) {
+      const editorRect = floatingEditor.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      if (editorRect.bottom > viewportHeight) {
+        floatingEditor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+    
+    showToast('Editorul a fost deschis! Spor la scris cod! 🚀', 'info');
+   });
 }
 
 function loadLesson(id) {
@@ -450,16 +383,28 @@ async function runCode() {
 function makeWindowDraggable(elmnt, header) {
   let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   header.onmousedown = dragMouseDown;
+  header.ontouchstart = dragTouchStart;
 
   function dragMouseDown(e) {
     if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
-    if (e.target.classList.contains('resizer')) return; // Avoid drag conflict with resizers
+    if (e.target.classList.contains('resizer')) return;
     e = e || window.event;
     e.preventDefault();
     pos3 = e.clientX;
     pos4 = e.clientY;
     document.onmouseup = closeDragElement;
     document.onmousemove = elementDrag;
+  }
+
+  function dragTouchStart(e) {
+    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+    if (e.target.classList.contains('resizer')) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    pos3 = touch.clientX;
+    pos4 = touch.clientY;
+    document.ontouchend = closeDragElement;
+    document.ontouchmove = elementTouchDrag;
   }
 
   function elementDrag(e) {
@@ -469,16 +414,26 @@ function makeWindowDraggable(elmnt, header) {
     pos2 = pos4 - e.clientY;
     pos3 = e.clientX;
     pos4 = e.clientY;
-    
+    applyDragPosition();
+  }
+
+  function elementTouchDrag(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    pos1 = pos3 - touch.clientX;
+    pos2 = pos4 - touch.clientY;
+    pos3 = touch.clientX;
+    pos4 = touch.clientY;
+    applyDragPosition();
+  }
+
+  function applyDragPosition() {
     let newTop = elmnt.offsetTop - pos2;
     let newLeft = elmnt.offsetLeft - pos1;
-    
-    // Bounds check
     if (newTop < 0) newTop = 0;
     if (newLeft < 0) newLeft = 0;
     if (newTop > window.innerHeight - 80) newTop = window.innerHeight - 80;
     if (newLeft > window.innerWidth - 100) newLeft = window.innerWidth - 100;
-
     elmnt.style.top = newTop + "px";
     elmnt.style.left = newLeft + "px";
     elmnt.style.bottom = 'auto';
@@ -488,7 +443,73 @@ function makeWindowDraggable(elmnt, header) {
   function closeDragElement() {
     document.onmouseup = null;
     document.onmousemove = null;
+    document.ontouchend = null;
+    document.ontouchmove = null;
   }
+}
+
+// Horizontal drag scrolling for lesson-nav on mobile
+function makeLessonNavDraggable() {
+  const nav = document.querySelector('.lesson-nav');
+  if (!nav) return;
+  
+  let isDragging = false;
+  let startX = 0;
+  let scrollLeft = 0;
+  
+  nav.style.cursor = 'grab';
+  
+  nav.addEventListener('mousedown', (e) => {
+    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+    if (window.innerWidth > 900) return; // Only for mobile
+    
+    isDragging = true;
+    nav.style.cursor = 'grabbing';
+    startX = e.clientX;
+    scrollLeft = nav.scrollLeft;
+    
+    const mouseMove = (moveEvent) => {
+      if (!isDragging) return;
+      moveEvent.preventDefault();
+      nav.scrollLeft = scrollLeft - (moveEvent.clientX - startX);
+    };
+    
+    const mouseUp = () => {
+      isDragging = false;
+      nav.style.cursor = 'grab';
+      document.removeEventListener('mousemove', mouseMove);
+      document.removeEventListener('mouseup', mouseUp);
+    };
+    
+    document.addEventListener('mousemove', mouseMove);
+    document.addEventListener('mouseup', mouseUp);
+  });
+  
+  // Touch support for mobile
+  nav.addEventListener('touchstart', (e) => {
+    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+    
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    scrollLeft = nav.scrollLeft;
+    nav.style.cursor = 'grabbing';
+    
+    const touchMove = (moveEvent) => {
+      if (!isDragging) return;
+      moveEvent.preventDefault();
+      nav.scrollLeft = scrollLeft - (moveEvent.touches[0].clientX - startX);
+    };
+    
+    const touchEnd = () => {
+      isDragging = false;
+      nav.style.cursor = 'grab';
+      nav.removeEventListener('touchmove', touchMove);
+      nav.removeEventListener('touchend', touchEnd);
+    };
+    
+    nav.addEventListener('touchmove', touchMove, { passive: false });
+    nav.addEventListener('touchend', touchEnd);
+  });
 }
 
 // All-Sides Window Resizing Logic
@@ -516,6 +537,20 @@ function makeWindowResizable(elmnt) {
       
       window.addEventListener('mousemove', resize);
       window.addEventListener('mouseup', stopResize);
+    });
+    resizer.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      currentResizer = resizer;
+      original_width = parseFloat(getComputedStyle(elmnt, null).getPropertyValue('width').replace('px', ''));
+      original_height = parseFloat(getComputedStyle(elmnt, null).getPropertyValue('height').replace('px', ''));
+      const touch = e.touches[0];
+      original_x = touch.clientX;
+      original_y = touch.clientY;
+      original_left = elmnt.offsetLeft;
+      original_top = elmnt.offsetTop;
+      
+      window.addEventListener('touchmove', touchResize);
+      window.addEventListener('touchend', stopTouchResize);
     });
   }
 
@@ -587,9 +622,21 @@ function makeWindowResizable(elmnt) {
     }
   }
 
+  function touchResize(e) {
+    const touch = e.touches[0];
+    const fakeEvent = { clientX: touch.clientX, clientY: touch.clientY };
+    resize(fakeEvent);
+  }
+
   function stopResize() {
     window.removeEventListener('mousemove', resize);
     window.removeEventListener('mouseup', stopResize);
+    currentResizer = null;
+  }
+
+  function stopTouchResize() {
+    window.removeEventListener('touchmove', touchResize);
+    window.removeEventListener('touchend', stopTouchResize);
     currentResizer = null;
   }
 }
@@ -600,6 +647,7 @@ document.getElementById('clearOutputBtn').addEventListener('click', clearOutput)
 
 // Minimize & Toggle actions
 minimizeBtn.addEventListener('click', () => {
+  if (window.innerWidth <= 900) return;
   floatingEditor.classList.add('minimized');
   floatingToggleBtn.classList.remove('hidden');
 });
@@ -628,23 +676,52 @@ async function init() {
     loadLesson(CURRICULUM[0].id);
   }
 
-  // Set initial position for the floating window
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-  if (w > 900) {
-    floatingEditor.style.top = (h - 610) + 'px';
-    floatingEditor.style.left = (w - 570) + 'px';
+  function ensureEditorVisible() {
+    const w = window.innerWidth;
+    
+    // Remove any minimized state
+    floatingEditor.classList.remove('minimized');
+    
+    if (w > 900) {
+      const h = window.innerHeight;
+      const editorWidth = floatingEditor.offsetWidth || 420;
+      const editorHeight = floatingEditor.offsetHeight || 400;
+      
+      floatingEditor.style.top = (h - editorHeight - 60) + 'px';
+      floatingEditor.style.left = (w - editorWidth - 30) + 'px';
+      floatingEditor.style.position = 'fixed';
+      floatingEditor.style.bottom = 'auto';
+      floatingEditor.style.right = 'auto';
+      
+      // Hide the toggle button when editor is visible on desktop
+      floatingToggleBtn.classList.add('hidden');
+    } else {
+      floatingEditor.style.position = 'relative';
+      floatingEditor.style.top = 'auto';
+      floatingEditor.style.left = 'auto';
+      floatingEditor.style.bottom = 'auto';
+      floatingEditor.style.right = 'auto';
+      
+      // Hide the toggle button when editor is visible on mobile
+      floatingToggleBtn.classList.add('hidden');
+    }
   }
+  
+  // Initial setup
+  ensureEditorVisible();
 
-  // Bind dragging and resizing
-  makeWindowDraggable(floatingEditor, editorHeader);
-  makeWindowResizable(floatingEditor);
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    ensureEditorVisible();
+  });
 
-  // Bind logo click event for cheat code detection
-  const logoHeader = document.querySelector('.logo');
-  if (logoHeader) {
-    logoHeader.addEventListener('click', handleLogoClick);
-    logoHeader.style.cursor = 'pointer';
+  // Enable horizontal drag scrolling for lesson-nav on mobile
+  makeLessonNavDraggable();
+
+  // Bind dragging and resizing only on desktop
+  if (window.innerWidth > 900) {
+    makeWindowDraggable(floatingEditor, editorHeader);
+    makeWindowResizable(floatingEditor);
   }
 
   await initPyodide();
