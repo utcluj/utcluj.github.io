@@ -7,9 +7,9 @@ const CURRICULUM = [
     title: 'Variabile & Ieșire',
     icon: '📦',
     concept: `
-      <h3>📖 Ce sunt variabilele?</h3>
-      <p>Variabilele sunt precum cutiile magice etichetate în care poți stoca informații. În Python, creezi o variabilă dându-i un nume și o valoare folosind semnul <code>=</code>.</p>
-      <p>Funcția <code>print()</code> afișează text sau valori pe ecran. Este modul prin care programul tău vorbește cu lumea!</p>
+      <h3>📖 Variabile și ieșire</h3>
+      <p>Variabilele sunt containere pentru stocarea datelor. În Python, creezi o variabilă dându-i un nume și o valoare folosind semnul <code>=</code>.</p>
+      <p>Funcția <code>print()</code> afișează text sau valori pe ecran.</p>
       <p><strong>Exemplu:</strong> <code>nume = "Ana"</code> creează o variabilă numită <code>nume</code> care conține textul "Ana".</p>
     `,
     example: `# Stocarea datelor în variabile
@@ -21,12 +21,12 @@ scoala = "Școala Soarelui"
 print("Nume:", nume)
 print("Vârstă:", varsta)
 print("Școală:", scoala)`,
-    gameExample: `# Joc: Creator de personaj
+    gameExample: `# Exemplu: Creator de personaj
 nume_erou = "Dragonul de Foc"
 viata = 100
 arma = "Sabie Magică"
 
-print("Joc: Bine ai venit, " + nume_erou + "!")
+print("Bine ai venit, " + nume_erou + "!")
 print("Viață: " + str(viata))
 print("Armă: " + arma)`,
     task: `🐾 Creează fișa unui animal de companie! Definește trei variabile:
@@ -78,7 +78,7 @@ print("Salut, " + nume + "!")
 # Obținerea unui număr (convertire text în număr întreg)
 varsta = int(input("Introdu vârsta ta: "))
 print("Anul viitor vei avea", varsta + 1)`,
-    gameExample: `# Joc: Pornirea aventurii
+    gameExample: `# Exemplu: Pornirea aventurii
 erou = input("Care este numele eroului tău? ")
 aventura = input("Ce aventură vei alege? ")
 
@@ -86,7 +86,7 @@ print("\n=== AVENTURA PORNITĂ ===")
 print("Erou:", erou)
 print("Aventură:", aventura)
 print("Mult noroc, " + erou + "!")`,
-    task: `🌈 Creează un program simplu care:
+    task: `Creează un program simplu care:
 1. Cere utilizatorului culoarea favorită cu mesajul: <code>"Care este culoarea ta preferată? "</code>
 2. Salvează răspunsul în variabila <code>culoare</code>
 3. Afișează: <code>"Culoarea ta preferată este [culoare]!"</code>
@@ -120,7 +120,7 @@ print("Culoarea ta preferată este " + culoare + "!")`,
     icon: '🔢',
     concept: `
       <h3>📖 Numere în Python</h3>
-      <p>Python poate face calcule matematice ca un super-calculator! Există două tipuri principale de numere:</p>
+      <p>Python poate face calcule matematice. Există două tipuri principale de numere:</p>
       <ul>
         <li><strong>Întregi</strong> (int): <code>5</code>, <code>42</code>, <code>-7</code></li>
         <li><strong>Zecimale</strong> (float): <code>3.14</code>, <code>2.5</code>, <code>-0.5</code></li>
@@ -141,7 +141,7 @@ print("Mere rămase:", mere % prieteni)
 # Puteri și rădăcini
 print("2 la puterea 10:", 2 ** 10)
 print("Rădăcina pătrată a lui 9:", 9 ** 0.5)`,
-    gameExample: `# Joc: Calculatorul de daune
+    gameExample: `# Exemplu: Calculatorul de daune
 atac = 35
 aparare = 10
 multiplicator_critic = 2
@@ -199,7 +199,7 @@ print(mesaj.strip())        # "Bună, Lume!"
 print(mesaj.upper())        # "  BUNĂ, LUME!  "
 print(mesaj.lower())        # "  bună, lume!  "
 print(mesaj.replace("Lume", "Python"))`,
-    gameExample: `# Joc: Decodificator de mesaje secrete
+    gameExample: `# Exemplu: Decodificator de mesaje secrete
 secret = "  aMiC dRaGoN  "
 
 pas1 = secret.strip()
@@ -208,7 +208,7 @@ pas3 = pas2.replace("A", "4")
 
 print("Original:", secret)
 print("Decodat:", pas3)`,
-    task: `🧙 Magie cu text! Pornind de la textul: <code>text = "Python e SUPER"</code>
+    task: `Pornind de la textul: <code>text = "Python e SUPER"</code>
 1. Elimină spațiile folosind <code>.strip()</code>
 2. Convertește-l la litere mici folosind <code>.lower()</code>
 3. Înlocuiește cuvântul "super" cu "minunat" folosind <code>.replace()</code>
@@ -256,7 +256,7 @@ fructe = ["măr", "banană", "cireș"]
 print(fructe[0])        # "măr"
 fructe.append("portocală")
 print(len(fructe))      # 4`,
-    gameExample: `# Joc: Inventarul eroului
+    gameExample: `# Exemplu: Inventarul unui personaj
 inventar = ["sabie", "poțiune"]
 inventar.append("scut")
 inventar.append("hartă")
@@ -315,7 +315,7 @@ elev = {
 }
 print(elev["nume"])  # "Sam"
 elev["oras"] = "Cluj"`,
-    gameExample: `# Joc: Fișa personajului
+    gameExample: `# Exemplu: Fișa personajului
 personaj = {
     "nume": "Luna",
     "clasa": "Vrăjitoare",
@@ -370,7 +370,7 @@ elif temperatura > 20:
     print("Vreme frumoasă")
 else:
     print("E frig!")`,
-    gameExample: `# Joc: Alege drumul
+    gameExample: `# Exemplu: Alege drumul
 drum = input("Alege drumul (stanga/dreapta): ")
 
 if drum == "stanga":
@@ -402,8 +402,8 @@ else:
       return {
         pass: passed,
         message: passed
-          ? '🎓 Evaluare finalizată! Ai înțeles perfect deciziile!'
-          : '🔀 Așteptat rezultatul "B" pentru nota 85.'
+          ? 'Bine! Ai înțeles deciziile if/elif/else.'
+          : 'Așteptat rezultatul "B" pentru nota 85.'
       };
     }
   },
@@ -428,7 +428,7 @@ contor = 3
 while contor > 0:
     print("Contor:", contor)
     contor = contor - 1`,
-    gameExample: `# Joc: Lansare rachetă
+    gameExample: `# Exemplu: Lansare rachetă
 secunde = 5
 while secunde > 0:
     print("T-minus", secunde)
@@ -473,7 +473,7 @@ def saluta(nume):
     return "Salut, " + name + "!"
 
 print(saluta("Gigel"))`,
-    gameExample: `# Joc: Daune calculate
+    gameExample: `# Exemplu: Calcul daune
 def calculeaza_daune(atac, scut):
     rezultat = atac - scut
     return max(0, rezultat)
@@ -493,7 +493,7 @@ print(patrat(5))`,
       return {
         pass: passed,
         message: passed
-          ? '🔧 Excelent! Funcția funcționează perfect!'
+          ? '🔧 Excelent! Funcția funcționează corect!'
           : '⚙️ Așteptat ca rezultatul apelului patrat(5) să fie 25.'
       };
     }
@@ -514,7 +514,7 @@ print(patrat(5))`,
 numere = [1, 2, 3, 4]
 dublate = [x * 2 for x in numere]
 print(dublate)  # [2, 4, 6, 8]`,
-    gameExample: `# Joc: Selecție luptători puternici
+    gameExample: `# Exemplu: Selecție valori puternice
 puteri = [50, 120, 30, 200, 85]
 luptatori_elite = [p for p in puteri if p >= 100]
 print("Elite:", luptatori_elite)`,
@@ -556,7 +556,7 @@ print(dublate)`,
     numar = int("text_gresit")
 except ValueError:
     print("Eroare de conversie!")`,
-    gameExample: `# Joc: Deschiderea lăzii
+    gameExample: `# Exemplu: Deschiderea lăzii
 def deschide(cheie):
     try:
         valoare = int(cheie)
@@ -606,7 +606,7 @@ except:
 coordonate = (10, 20)
 print(coordonate[0])  # 10
 # coordonate[0] = 50 -> Va genera o eroare!`,
-    gameExample: `# Joc: Pozițiile pe ecran ale personajelor
+    gameExample: `# Exemplu: Poziții pe ecran
 pozitie_erou = (100, 150)
 x, y = pozitie_erou
 print(f"Eroul este la X: {x}, Y: {y}")`,
@@ -679,7 +679,7 @@ print("Pamant" in vrajile_anei)`,
       return {
         pass: passed,
         message: passed
-          ? '🔶 Superb! Ai învățat operațiile de mulțimi!'
+          ? '🔶 Superb! Ai învățat operațiile cu mulțimi!'
           : '🔶 Asigură-te că afișezi reuniunea, intersecția și rezultatul verificării.'
       };
     }
@@ -701,12 +701,12 @@ nume = "Dan"
 nota = 9.578
 print(f"Salut, {nume}!")
 print(f"Nota rotunjită este: {nota:.1f}")`,
-    gameExample: `# Joc: Interfața eroului
+    gameExample: `# Exemplu: Interfața unui utilizator
 erou = "Magician"
 nivel = 12
 xp = 450
 print(f"🦸 Erou: {erou:<10} | Nivel: {nivel} | XP: {xp}")`,
-    task: `✍️ Formatează raportul unui elev!
+    task: `Formatează raportul unui elev:
 Variabilele sunt deja declarate în codul de pornire.
 1. Afișează: <code>"Elev: [nume], Clasa: [clasa]"</code> folosind f-string
 2. Afișează media formatată cu exact o singură zecimală: <code>"Media: [medie]"</code> (folosește formatarea <code>{medie:.1f}</code>)
@@ -748,7 +748,7 @@ print(f"Felicitări, {nume}! Ai promovat clasa {clasa}!")`,
 for i in range(2):
     for j in range(3):
         print(f"i={i}, j={j}")`,
-    gameExample: `# Joc: Desenarea hărții 3x3
+    gameExample: `# Exemplu: Desenarea unei hărți 3x3
 for rand in range(3):
     for col in range(3):
         print("🟩", end="")
@@ -796,7 +796,7 @@ cuvinte = ["Ana", "are", "mere"]
 propozitie = "-".join(cuvinte)
 print(propozitie)  # "Ana-are-mere"
 print(propozitie[::-1]) # "erem-era-anA"`,
-    gameExample: `# Joc: Mesaj secret spion
+    gameExample: `# Exemplu: Mesaj secret
 mesaj = "SALUT"
 inversat = mesaj[::-1]
 print("Mesaj codat:", inversat) # "TULAS"`,
@@ -845,7 +845,7 @@ def adauga():
 
 adauga()
 print(scor)  # 10`,
-    gameExample: `# Joc: Contor monede
+    gameExample: `# Exemplu: Contor de monede
 monede = 0
 
 def primeste_monede(suma):
@@ -909,11 +909,11 @@ retrage(200)`,
     example: `# Lambda simplu
 dublu = lambda x: x * 2
 print(dublu(5))  # 10`,
-    gameExample: `# Joc: Sortează personajele după puncte
+    gameExample: `# Exemplu: Sortare după puncte
 clasament = [("Erou", 90), ("Monstru", 40), ("Zână", 75)]
 sortati = sorted(clasament, key=lambda p: p[1])
 print(sortati)`,
-    task: `⚡ Sortează și filtrează date rapid!
+    task: `Sortează și filtrează date:
 Ai o listă de numere: <code>puncte = [45, 12, 87, 23, 67, 9, 55]</code>
 1. Sortează lista descrescător folosind <code>sorted()</code> și afișeaz-o
 2. Creează o listă numită <code>mari</code> care conține doar numerele din listă mai mari de 50 folosind <code>filter()</code> și o funcție lambda. Printează lista <code>mari</code>
@@ -934,7 +934,7 @@ print(triplicate)`,
       return {
         pass: passed,
         message: passed
-          ? '⚡ Excelent! Codul tău este acum mult mai rapid și mai concis!'
+          ? 'Bine! Codul este corect și concis.'
           : '⚡ Asigură-te că utilizezi corect lambda împreună cu filter și map.'
       };
     }
@@ -960,7 +960,7 @@ def numara(n):
     numara(n - 1)
 
 numara(3)`,
-    gameExample: `# Joc: Ecoul peșterii
+    gameExample: `# Exemplu: Ecoul unei peșteri
 def ecou(cuvant, repetari):
     if repetari <= 0:
         return ""
@@ -1018,7 +1018,7 @@ class Caine:
 
 rex = Caine("Rex")
 rex.latra()`,
-    gameExample: `# Joc: Proprietăți erou
+    gameExample: `# Exemplu: Proprietăți personaj
 class Erou:
     def __init__(self, nume, hp):
         self.nume = nume
@@ -1080,7 +1080,7 @@ Maria,15"""
 for rand in date.split("\n"):
     parti = rand.split(",")
     print(f"Nume: {parti[0]}, Scor: {parti[1]}")`,
-    gameExample: `# Joc: Scoruri dintr-un fișier
+    gameExample: `# Exemplu: Scoruri dintr-un fișier
 date_joc = """Erou1,3000\nErou2,4500"""
 for linie in date_joc.split("\n"):
     if linie.strip():
@@ -1148,7 +1148,7 @@ def numere_pana_la(maxim):
 
 for valoare in numere_pana_la(3):
     print(valoare)  # Afișează 1, apoi 2, apoi 3`,
-    gameExample: `# Joc: Generare inamici nelimitați
+    gameExample: `# Exemplu: Generator nelimitat
 def gen_inamici():
     contor = 1
     while True:
@@ -1213,7 +1213,7 @@ def spune_nume():
     print("Sunt Gigel.")
 
 spune_nume()`,
-    gameExample: `# Joc: Jurnalizare atac
+    gameExample: `# Exemplu: Jurnalizare a funcțiilor
 def log_atac(func):
     def wrapper(*args):
         print("[LOG] Începe lupta!")
@@ -1283,7 +1283,7 @@ print(sorted(numere))  # [10, 30, 50]
 # Căutare rapidă
 valori = [1, 2, 3, 4, 5]
 print(3 in valori)  # True`,
-    gameExample: `# Joc: Sortează inamicii după HP
+    gameExample: `# Exemplu: Sortare după puncte de viață
 inamici = [
     {"nume": "Zombie", "hp": 50},
     {"nume": "Dragon", "hp": 500},
@@ -1335,7 +1335,7 @@ print("Min:", min(scoruri))`,
 numere = [1, 2, 3]
 patrate_dict = {x: x**2 for x in numere}
 print(patrate_dict)  # {1: 1, 2: 4, 3: 9}`,
-    gameExample: `# Joc: Lista de prețuri a magazinului
+    gameExample: `# Exemplu: Lista de prețuri
 produse = ["sabie", "scut", "potiune"]
 magazin = {p: len(p) * 10 for p in produse}
 print(magazin) # Prețuri bazate pe lungimea numelui`,
@@ -1361,8 +1361,8 @@ print(initiale)`,
       return {
         pass: passed,
         message: passed
-          ? '🧩 Super! Comprehensiunile tale sunt perfecte și elegante!'
-          : '🌈 Verifică listele, dicționarul și setul generate.'
+          ? 'Bine! Comprehensiunile sunt corecte.'
+          : 'Verifică listele, dicționarul și setul generate.'
       };
     }
   },
@@ -1389,7 +1389,7 @@ class Masina(Vehicul): # Moștenește Vehicul
 m = Masina()
 m.porneste()     # Metodă moștenită!
 m.claxoneaza()`,
-    gameExample: `# Joc: Clase de eroi
+    gameExample: `# Exemplu: Clase de personaje
 class Personaj:
     def __init__(self, nume):
         self.nume = nume
@@ -1441,7 +1441,7 @@ mitu.toarce()`,
       return {
         pass: passed,
         message: passed
-          ? '👑 Felicitări! Ai stăpânit pe deplin conceptul de moștenire în OOP!'
+          ? '👑 Felicitări! Ai înțeles conceptul de moștenire în OOP!'
           : '🐾 Asigură-te că ambele animale scot sunetele specifice și execută activitățile lor.'
       };
     }
@@ -1469,7 +1469,7 @@ try:
     verifica(5)
 except ValoarePreaMica as e:
     print(e)`,
-    gameExample: `# Joc: Monede insuficiente
+    gameExample: `# Exemplu: Gestiune monede
 class MonedeInsuficiente(Exception):
     pass
 
@@ -1540,7 +1540,7 @@ if ghicitura == secret:
     print("Ai ghicit!")
 else:
     print("Mai încearcă!")`,
-    gameExample: `# Joc complet de testat rapid
+    gameExample: `# Exemplu: Verificare scor
 def verifica_scor(incercari):
     if incercari <= 3:
         return "Scor maxim: 100!"
@@ -1617,7 +1617,7 @@ print(math.sqrt(16))  # 4.0
 
 # Număr la întâmplare
 print(random.randint(1, 10))`,
-    gameExample: `# Joc: Zaruri cu bonus matematic
+    gameExample: `# Exemplu: Zaruri cu bonus
 import random
 import math
 
@@ -1670,7 +1670,7 @@ for i in range(n):
         if numere[j] > numere[j+1]:
             numere[j], numere[j+1] = numere[j+1], numere[j]
 print(numere)  # [1, 2, 5, 9]`,
-    gameExample: `# Joc: Sortează bomboanele după greutate
+    gameExample: `# Exemplu: Sortare obiecte după greutate
 bomboane = [{"nume": "Menta", "g": 12}, {"nume": "Jelly", "g": 5}, {"nume": "Choco", "g": 20}]
 n = len(bomboane)
 for i in range(n):
@@ -1698,7 +1698,7 @@ print(inaltimi)`,
       return {
         pass: passed,
         message: passed
-          ? '🫧 Excelent! Ai stăpânit algoritmul Bubble Sort! Ești un programator complet! 🎉🐍🚀'
+          ? '🫧 Excelent! Ai stăpânit algoritmul Bubble Sort! Ești un programator priceput! 🎉🐍🚀'
           : '🫧 Verifică algoritmul. Rezultatul final trebuie să fie exact [50, 85, 120, 150, 300].'
       };
     }
