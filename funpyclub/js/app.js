@@ -3,15 +3,12 @@ let pyodideReady = false;
 let currentLessonId = null;
 let completedLessons = new Set();
 let totalXP = 0;
-let streak = 0;
-let lastCompletedDate = null;
 
 const outputArea = document.getElementById('outputArea');
 const codeEditor = document.getElementById('codeEditor');
 const lessonNav = document.getElementById('lessonNav');
 const contentPanel = document.getElementById('contentPanel');
 const xpDisplay = document.getElementById('xpDisplay');
-const streakDisplay = document.getElementById('streakDisplay');
 const progressFill = document.getElementById('progressFill');
 const loadingOverlay = document.getElementById('pyodideLoading');
 const floatingEditor = document.getElementById('floatingEditor');
@@ -26,13 +23,9 @@ function loadProgress() {
       const data = JSON.parse(saved);
       completedLessons = new Set(data.completed || []);
       totalXP = data.totalXP || 0;
-      streak = data.streak || 0;
-      lastCompletedDate = data.lastCompletedDate || null;
     } else {
       completedLessons = new Set();
       totalXP = 0;
-      streak = 0;
-      lastCompletedDate = null;
     }
   } catch (e) {
     console.error('Failed to load progress:', e);
@@ -43,9 +36,7 @@ function saveProgress() {
   try {
     const data = {
       completed: Array.from(completedLessons),
-      totalXP,
-      streak,
-      lastCompletedDate
+      totalXP
     };
     localStorage.setItem('FunPyClub_progress', JSON.stringify(data));
   } catch (e) {
@@ -53,24 +44,10 @@ function saveProgress() {
   }
 }
 
-function updateStreak() {
-  const today = new Date().toDateString();
-  if (lastCompletedDate !== today) {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    if (lastCompletedDate === yesterday.toDateString()) {
-      streak += 1;
-    } else if (lastCompletedDate !== today) {
-      streak = 1;
-    }
-    lastCompletedDate = today;
-  }
-}
-
 function updateStats() {
   xpDisplay.textContent = totalXP;
-  streakDisplay.textContent = streak;
-  const progress = (completedLessons.size / CURRICULUM.length) * 100;
+  const totalPossibleXP = CURRICULUM.reduce((sum, lesson) => sum + (lesson.xp || 0), 0);
+  const progress = totalPossibleXP > 0 ? (totalXP / totalPossibleXP) * 100 : 0;
   progressFill.style.width = progress + '%';
 }
 
@@ -230,6 +207,19 @@ function loadLesson(id) {
   if (!lesson) return;
   renderLesson(lesson);
   renderSidebar();
+
+  const submitBtn = document.getElementById('submitBtn');
+  if (submitBtn) {
+    if (completedLessons.has(id)) {
+      submitBtn.disabled = true;
+      submitBtn.title = "Ai completat deja această lecție!";
+      submitBtn.textContent = '✅ Trimis';
+    } else {
+      submitBtn.disabled = false;
+      submitBtn.title = "Trimite soluția spre verificare";
+      submitBtn.textContent = '✅ Trimite';
+    }
+  }
 }
 
 async function runPythonCode(code, simulateInput) {
@@ -244,14 +234,40 @@ async function runPythonCode(code, simulateInput) {
   if (simulateInput) {
     stdinSetup = `
 import sys
+import builtins
 from io import StringIO
-sys.stdin = StringIO("${simulateInput}\\n")
+
+if not hasattr(builtins, '_original_input'):
+    builtins._original_input = builtins.input
+builtins.input = builtins._original_input
+
+class SafeStringIO(StringIO):
+    def readline(self):
+        line = super().readline()
+        return line if line else '\\n'
+sys.stdin = SafeStringIO("${simulateInput}\\n")
 `;
   } else {
     stdinSetup = `
 import sys
-from io import StringIO
-sys.stdin = StringIO("")
+import builtins
+from js import prompt
+
+if not hasattr(builtins, '_original_input'):
+    builtins._original_input = builtins.input
+
+def custom_input(prompt_text=""):
+    prompt_str = str(prompt_text)
+    print(prompt_str, end="")
+    val = prompt(prompt_str)
+    if val is None:
+        val = ""
+    else:
+        print(val)
+    return val
+
+builtins.input = custom_input
+sys.stdin = sys.__stdin__
 `;
   }
 
@@ -296,6 +312,17 @@ async function submitCode() {
   const lesson = CURRICULUM.find(l => l.id === currentLessonId);
   if (!lesson) return;
 
+  if (completedLessons.has(lesson.id)) {
+    showToast('⚠️ Ai completat deja această lecție!', 'info');
+    return;
+  }
+
+  const submitBtn = document.getElementById('submitBtn');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = '⏳ Se verifică...';
+  }
+
   clearOutput();
   showToast('⏳ Se verifică soluția ta...', 'info');
 
@@ -321,20 +348,34 @@ async function submitCode() {
 
     if (passed) {
       showToast('🎉 Corect! Ai completat lecția!', 'success');
-      completedLessons.add(lesson.id);
-      totalXP += lesson.xp;
-      updateStreak();
-      saveProgress();
-      updateStats();
-      renderSidebar();
+      const isFirstTime = !completedLessons.has(lesson.id);
+      if (isFirstTime) {
+        completedLessons.add(lesson.id);
+        totalXP += lesson.xp;
+        saveProgress();
+        updateStats();
+        renderSidebar();
+      }
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = '✅ Trimis';
+      }
       showSuccessModal(lesson);
     } else {
       showToast('❌ Ceva nu a mers bine! Încearcă din nou.', 'error');
       appendOutput(message, 'error');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '✅ Trimite';
+      }
     }
   } catch (e) {
     showToast('❌ Eroare la rulare!', 'error');
     appendOutput('Eroare: ' + e.message, 'error');
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '✅ Trimite';
+    }
   }
 }
 

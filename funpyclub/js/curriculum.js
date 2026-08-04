@@ -99,7 +99,7 @@ print("Culoarea ta preferată este " + culoare + "!")`,
     validator: (output) => {
       const checks = [
         output.includes('albastru'),
-        output.includes('preferată') || output.includes('preferata') || output.includes('este')
+        output.includes('preferată') || output.includes('preferata')
       ];
       const passed = checks.filter(Boolean).length >= 1;
       return {
