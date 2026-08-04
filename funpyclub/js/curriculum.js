@@ -82,7 +82,7 @@ print("Anul viitor vei avea", varsta + 1)`,
 erou = input("Care este numele eroului tău? ")
 aventura = input("Ce aventură vei alege? ")
 
-print("=== AVENTURA PORNITĂ ===")
+print("=== AVENTURA A INCEPUT ===")
 print("Erou:", erou)
 print("Aventură:", aventura)
 print("Mult noroc, " + erou + "!")`,
@@ -325,7 +325,7 @@ personaj = {
 }
 
 for atribut, valoare in personaj.items():
-    print(atribut.capitalize() + ":", valoare)`,
+    print(atribut + ":", valoare)`,
     task: `📖 Creează un dicționar numită <code>carte</code> cu cheile "titlu", "autor" și "pagini" (pune ce valori vrei).
 Apoi:
 1. Afișează titlul folosind <code>carte["titlu"]</code>
@@ -339,7 +339,7 @@ for k, v in carte.items():
     xp: 90,
     starterCode: `# Creează dicționarul carte\n`,
     validator: (output) => {
-      const areTitlu = output.includes('titlu') || output.includes('Codul') || output.includes('carte');
+      const areTitlu = output.includes('titlu') || output.includes('carte');
       const areAn = output.includes('an') || output.includes('2023');
       const passed = areTitlu && areAn;
       return {
@@ -437,9 +437,9 @@ while secunde > 0:
 print("🚀 Decolare!")`,
     task: `🔢 Afișează tabela înmulțirii cu 5!
 Folosește o buclă <code>for</code> cu <code>range(1, 11)</code> pentru a afișa:
-- "5 x 1 = 5"
-- "5 x 2 = 10"
-- ... până la "5 x 10 = 50"`,
+<br> 5 x 1 = 5
+<br> 5 x 2 = 10
+<br> ... până la 5 x 10 = 50`,
     solution: `for i in range(1, 11):
     print("5 x", i, "=", 5 * i)`,
     xp: 110,
@@ -1076,14 +1076,13 @@ print(m.este_rapida())`,
       <p>În viața reală, datele vin din fișiere externe. Putem simula citirea unui fișier transformând un text pe mai multe rânduri într-o listă de rânduri cu <code>split("\\n")</code>.</p>
     `,
     example: `# Procesare text multilinie
-date = """Gigel,10
-Maria,15"""
-for rand in date.split("\n"):
+date = """Gigel,10\\nMaria,15"""
+for rand in date.split("\\n"):
     parti = rand.split(",")
     print(f"Nume: {parti[0]}, Scor: {parti[1]}")`,
     gameExample: `# Exemplu: Scoruri dintr-un fișier
-date_joc = """Erou1,3000\nErou2,4500"""
-for linie in date_joc.split("\n"):
+date_joc = """Erou1,3000\\nErou2,4500"""
+for linie in date_joc.split("\\n"):
     if linie.strip():
         nume, scor = linie.split(",")
         print(f"Jucător: {nume} -> Scor: {scor}")`,
@@ -1094,11 +1093,7 @@ Pornind de la textul definit în editorul de cod:
 3. Calculează suma notelor și media lor
 4. Afișează fiecare elev sub forma: <code>"[nume]: nota [nota]"</code>
 5. La final, afișează media clasei rotunjită la o zecimală: <code>"Media clasei: [medie]"</code> (Așteptat: 8.6)`,
-    solution: `date_elevi = """Ana,9
-Bob,7
-Maria,10
-Ion,8
-Elena,9"""
+    solution: `date_elevi = """Ana,9\\nBob,7\\nMaria,10\\nIon,8\\nElena,9"""
 
 total = 0
 numar = 0
@@ -1115,7 +1110,7 @@ for rand in date_elevi.split("\\n"):
 medie = total / numar
 print(f"Media clasei: {medie:.1f}")`,
     xp: 140,
-    starterCode: `date_elevi = """Ana,9\nBob,7\nMaria,10\nIon,8\nElena,9"""\n# Procesează notele\n`,
+    starterCode: `date_elevi = """Ana,9\\nBob,7\\nMaria,10\\nIon,8\\nElena,9"""\n# Procesează notele\n`,
     validator: (output) => {
       const hasAvg = output.includes('8.6') || output.includes('8,6') || output.includes('Media clasei');
       const hasNames = output.includes('Ana') && output.includes('Elena');
