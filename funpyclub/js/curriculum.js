@@ -82,7 +82,7 @@ print("Anul viitor vei avea", varsta + 1)`,
 erou = input("Care este numele eroului tău? ")
 aventura = input("Ce aventură vei alege? ")
 
-print("\n=== AVENTURA PORNITĂ ===")
+print("=== AVENTURA PORNITĂ ===")
 print("Erou:", erou)
 print("Aventură:", aventura)
 print("Mult noroc, " + erou + "!")`,
@@ -101,7 +101,8 @@ print("Culoarea ta preferată este " + culoare + "!")`,
         output.includes('albastru'),
         output.includes('preferată') || output.includes('preferata')
       ];
-      const passed = checks.filter(Boolean).length >= 1;
+      const passed = checks.filter(Boolean).length >= 2;
+      console.log(output, checks)
       return {
         pass: passed,
         message: passed

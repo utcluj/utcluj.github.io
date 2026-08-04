@@ -333,7 +333,7 @@ async function submitCode() {
 
     if (lesson.validator) {
       try {
-        output = await runPythonCode(codeEditor.value, 'albastru');
+        output = await runPythonCode(codeEditor.value, '');
       } catch (e) {
         output = e.message;
       }
