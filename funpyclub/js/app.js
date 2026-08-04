@@ -153,6 +153,33 @@ function renderSidebar() {
   });
 }
 
+function transferCodeToEditor(code, starterCode) {
+  if (!code) return;
+
+  const currentVal = codeEditor.value;
+  if (currentVal && currentVal.trim() !== '' && currentVal !== starterCode && currentVal !== code) {
+    const confirmTransfer = confirm("Ești sigur că vrei să încarci acest cod în editor? Codul tău curent va fi înlocuit.");
+    if (!confirmTransfer) return;
+  }
+
+  codeEditor.value = code;
+
+  // Open editor if minimized
+  floatingEditor.classList.remove('minimized');
+  floatingToggleBtn.classList.add('hidden');
+  codeEditor.focus();
+
+  if (window.innerWidth > 900) {
+    const editorRect = floatingEditor.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    if (editorRect.bottom > viewportHeight) {
+      floatingEditor.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+
+  showToast('Codul a fost încărcat în editor! 💻🚀', 'success');
+}
+
 function renderLesson(lesson) {
   contentPanel.innerHTML = `
     <div class="lesson-card">
@@ -166,14 +193,24 @@ function renderLesson(lesson) {
       <div class="concept-section">
         ${lesson.concept}
       </div>
+      ${lesson.example ? `
       <div class="concept-section">
         <h3>💡 Exemplu</h3>
-        <pre class="example-block"><code>${highlightPython(lesson.example)}</code></pre>
+        <div class="code-wrapper-relative">
+          <pre class="example-block"><code>${highlightPython(lesson.example)}</code></pre>
+          <button class="btn-transfer" id="loadExampleBtn" title="Încarcă în editor">📋 Încarcă în editor</button>
+        </div>
       </div>
+      ` : ''}
+      ${lesson.gameExample ? `
       <div class="concept-section">
         <h3>🎮 Exemplu de joc</h3>
-        <pre class="game-example"><code>${highlightPython(lesson.gameExample)}</code></pre>
+        <div class="code-wrapper-relative">
+          <pre class="game-example"><code>${highlightPython(lesson.gameExample)}</code></pre>
+          <button class="btn-transfer" id="loadGameExampleBtn" title="Încarcă în editor">📋 Încarcă în editor</button>
+        </div>
       </div>
+      ` : ''}
       <div class="task-section">
         <h3>🎯 Sarcina ta</h3>
         <p class="task-text">${lesson.task}</p>
@@ -183,6 +220,15 @@ function renderLesson(lesson) {
   `;
   codeEditor.value = lesson.starterCode;
   
+  // Set up listeners for the transfer buttons
+  document.getElementById('loadExampleBtn')?.addEventListener('click', () => {
+    transferCodeToEditor(lesson.example, lesson.starterCode);
+  });
+
+  document.getElementById('loadGameExampleBtn')?.addEventListener('click', () => {
+    transferCodeToEditor(lesson.gameExample, lesson.starterCode);
+  });
+
   // When 'Editează soluția' is clicked, restore editor and focus it
   document.getElementById('taskEditBtn')?.addEventListener('click', () => {
     floatingEditor.classList.remove('minimized');

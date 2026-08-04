@@ -1098,3 +1098,51 @@ body {
     display: block;
   }
 }
+
+/* Styling for code block wrapper and transfer button */
+.code-wrapper-relative {
+  position: relative;
+}
+
+.btn-transfer {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--bg-sidebar) !important;
+  color: var(--text-primary) !important;
+  border: 1.5px solid var(--border-playful) !important;
+  padding: 4px 8px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease-in-out;
+  z-index: 5;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-transfer:hover {
+  background: linear-gradient(135deg, var(--primary-dark), var(--secondary)) !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-transfer:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  .btn-transfer {
+    padding: 3px 6px;
+    font-size: 0.65rem;
+    top: 4px;
+    right: 4px;
+  }
+}
+
